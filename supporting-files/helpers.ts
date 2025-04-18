@@ -26,6 +26,14 @@ export function ConvertUnits(
             x.toUnitType === toUoMType
     );
 
+    // add new logic to conver cups to grams
+    if (!conversionRate && fromUoM.uomName === UoMName.cups && fromUoM.uomType === UoMType.volume && toUoMName === UoMName.grams && toUoMType === UoMType.mass) {
+        // convert cups => millilitres => grams
+        const convertToMillilitres = ConvertUnits(fromUoM, UoMName.millilitres, UoMType.volume);
+        const convertToGrams = ConvertUnits(convertToMillilitres, UoMName.grams, UoMType.mass);
+        return convertToGrams;
+    }
+
     if (!conversionRate)
         throw new Error(`Couldn't convert ${fromUoM.uomName} to ${toUoMName}`);
 
